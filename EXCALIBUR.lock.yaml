@@ -1,0 +1,13 @@
+schema: 1
+requirement: excalibur
+source: https://github.com/owenarthur/excalibur
+branch: master
+revision: 084f9372bebc4914ca01c9ac591692d3353c2661
+gitTree: 204ed76b1baec34e65cbfcdcdb6f9a46f23d52bd
+archiveSha256: eedc7347c3ef4b7593de67bd662365c0abd0617a313310a67c0f6fb4e8033b17
+status: summoner-fork-merged
+integration: reference-only
+submodule: false
+license:
+  status: no-license-published
+  effect: reference-only

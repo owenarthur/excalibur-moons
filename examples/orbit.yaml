@@ -1,0 +1,110 @@
+# Illustration only: this is neither a schema nor deployable configuration.
+# Names and infrastructure are synthetic; unresolved values are deliberate.
+
+format: excalibur-moons-example-1
+intent: illustrative
+
+summoner: "principal:example-summoner"
+
+orbit:
+  planet:
+    id: hearth
+    host: main-machine
+    control: summoner-root
+    operators: ["principal:example-summoner"]
+
+  homeMoon:
+    id: beacon
+    host: main-machine
+    resident: {spirit: rowan, serviceIdentity: "service:rowan"}
+    operators: ["principal:example-summoner"]
+    residentCapabilities:
+      profile: primary-generalist
+      modelBudget: high
+      workingCapacity: high
+      mediatedNetwork: true
+      orbitVisibility: true
+      planetAuthority: false
+    entrances:
+      spirit: ["principal:example-summoner"]
+      shell: ["principal:example-summoner"]
+      files: ["principal:example-summoner"]
+    modelAccess:
+      mode: provider-managed-gateway
+      credentialOnMoon: false
+    exposure: private-authenticated
+
+  moons:
+    - id: kiln
+      host: {kind: virtual-machine, platform: example-provider}
+      resident: {spirit: ember, serviceIdentity: "service:ember"}
+      operators: ["principal:example-summoner"]
+      residentCapabilities:
+        profile: purpose-bounded
+        mediatedNetwork: false
+        orbitVisibility: false
+        planetAuthority: false
+      entrances:
+        spirit: ["principal:example-summoner"]
+        shell: ["principal:example-summoner"]
+        files: ["principal:example-summoner"]
+      modelAccess:
+        mode: provider-managed-gateway
+        credentialOnMoon: false
+      exposure: private-authenticated
+
+administration:
+  - id: hearth-beacon-admin
+    planet: hearth
+    moon: beacon
+    operator: "principal:example-summoner"
+    credentialCustody: summoner-only
+    paths: {normal: local-supervision, recovery: local-console}
+    allowedActs: [inspect, update, verify, recover, retire]
+    moonReceivesPlanetCredential: false
+
+  - id: hearth-kiln-admin
+    planet: hearth
+    moon: kiln
+    operator: "principal:example-summoner"
+    credentialCustody: summoner-only
+    paths:
+      normal: private-provider-administration
+      recovery: provider-console
+    allowedActs: [inspect, update, verify, recover, retire]
+    moonReceivesPlanetCredential: false
+
+moonlinks:
+  - id: beacon-kiln
+    version: 1
+    endpoints:
+      homeMoon: {id: beacon, spirit: rowan}
+      moon: {id: kiln, spirit: ember}
+    authorship: bilateral
+    networkInitiator: hearth
+    transport: private-provider-peer
+    authentication: application-signature-v1
+    newThreadAdmission:
+      beaconToKiln: automatic
+      kilnToBeacon: "principal:example-summoner"
+    admittedThreadReplies: automatic
+    delivery: durable-at-least-once-idempotent
+    maximumBytes: 65536
+    retention: unresolved
+    grantsAdministration: false
+    grantsExecution: false
+    grantsCredentials: false
+    grantsForwarding: false
+
+statePolicy:
+  carry: [realm, resident-identity-and-authority, practices, useful-memory, application-data]
+  archive: [old-audiences, completed-workings, former-release]
+  discard: [sessions, claims, leases, locks, sockets, caches]
+  recreate: [software, supervision, credentials, communication-epochs, provider-access, current-runtime, indexes]
+
+publicExposure: none
+unknowns:
+  - Moonlink retention policy
+  - backup scope and destination
+  - exact provider transport guarantees
+  - restore rehearsal result
